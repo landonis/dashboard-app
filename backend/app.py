@@ -97,9 +97,8 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         if user:
-            print("User found:", user.username)
-            print("Hash from DB:", user.password_hash)
-            print("Password valid:", user.check_password(password))
+            logger.debug(f"Input password: {password}")
+            logger.debug(f"Hash from DB: {user.password_hash}")
 
         if user and user.check_password(password):
             logger.info(f"User {username} logged in successfully, creating access token")
