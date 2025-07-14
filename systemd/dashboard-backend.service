@@ -8,7 +8,8 @@ User=dashboardapp
 Group=dashboardapp
 WorkingDirectory=/opt/dashboard-app/backend
 Environment=PATH=/opt/dashboard-app/backend/venv/bin
-ExecStart=/opt/dashboard-app/backend/venv/bin/python app.py
+Environment=PYTHONPATH=/opt/dashboard-app:/opt/dashboard-app/backend
+ExecStart=/opt/dashboard-app/backend/venv/bin/python run.py
 Restart=always
 RestartSec=10
 StandardOutput=journal

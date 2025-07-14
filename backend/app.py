@@ -2,6 +2,8 @@
 
 import os
 import sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -238,8 +240,16 @@ def change_password(user_id):
         return jsonify({'error': 'Failed to change password'}), 500
 
 # Import and register module routes
-from modules.system_info.api import system_info_bp
-app.register_blueprint(system_info_bp, url_prefix='/api/modules')
+try:
+    from modules.system_info.api import system_info_bp
+    app.register_blueprint(system_info_bp, url_prefix='/api/modules')
+    logger.info("System info module loaded successfully")
+except ImportError as e:
+    logger.error(f"Failed to load system info module: {str(e)}")
+except Exception as e:
+    logger.error(f"Error registering system info module: {str(e)}")
+
+# Health check endpoint
 
 @app.route('/api/health', methods=['GET'])
 def health_check():

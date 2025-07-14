@@ -128,9 +128,9 @@ fi
 # Initialize database
 log "Initializing database..."
 cd "$INSTALL_DIR/backend"
-sudo -u "$SERVICE_USER" ./venv/bin/python app.py &
+sudo -u "$SERVICE_USER" PYTHONPATH="$INSTALL_DIR:$INSTALL_DIR/backend" ./venv/bin/python run.py &
 sleep 5
-pkill -f "python app.py" || true
+pkill -f "python run.py" || true
 
 # Configure systemd services
 log "Configuring systemd services..."
