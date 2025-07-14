@@ -2,7 +2,14 @@
 
 # Dashboard App Setup Script
 # This script sets up the dashboard application with all required components
+set -e
 
+# Configuration
+REPO_URL="https://github.com/landonis/dashboard-app"
+INSTALL_DIR="/opt/dashboard-app"
+SERVICE_USER="dashboardapp"
+LOG_FILE="/var/log/dashboard-setup.log"
+DOMAIN_NAME="${DOMAIN_NAME:-localhost}"
 
 # Logging function
 log() {
@@ -21,14 +28,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 log "Starting dashboard application setup..."
-set -e
 
-# Configuration
-REPO_URL="https://github.com/landonis/dashboard-app"
-INSTALL_DIR="/opt/dashboard-app"
-SERVICE_USER="dashboardapp"
-LOG_FILE="/var/log/dashboard-setup.log"
-DOMAIN_NAME="${DOMAIN_NAME:-localhost}"
 
 # Close running backend if needed
 PORT=5000
