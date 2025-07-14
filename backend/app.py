@@ -40,7 +40,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Initialize extensions
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
-CORS(app, origins=["http://localhost:3000", "https://localhost:3000"])
+CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "*"}})
 
 # Database Models
 class User(db.Model):
