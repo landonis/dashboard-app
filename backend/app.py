@@ -40,27 +40,6 @@ db = SQLAlchemy(app)
 jwt = JWTManager(app)
 CORS(app, origins=["http://localhost:3000", "https://localhost:3000"])
 
-# Database Models
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password_hash = db.Column(db.String(120), nullable=False)
-    role = db.Column(db.String(20), nullable=False, default='user')
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'username': self.username,
-            'role': self.role,
-            'created_at': self.created_at.isoformat()
-        }
 
 # Authentication decorators
 def admin_required(f):
