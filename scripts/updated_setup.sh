@@ -33,7 +33,7 @@ log "Starting dashboard application setup..."
 # Close running backend if needed
 PORT=5000
 # Check if the port is in use
-PID=$(sudo lsof -ti :$PORT)
+PID=$(lsof -ti :$PORT)
 
 if [ -n "$PID" ]; then
   echo "Process found using port $PORT (PID: $PID). Killing it..."
