@@ -1,9 +1,7 @@
 # Deploy
 
 copy updated_setup.sh to machine and run it
-adjust Domain var insite of /opt/dashboard-app/scripts/SSL.sh
-run SSL.sh
-add ^~ to location /api/
+add a domain name to the setup script to add SSL
 
 
 # Modular Dashboard Web App
