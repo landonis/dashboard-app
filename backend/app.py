@@ -52,9 +52,6 @@ class User(db.Model):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
-        print("Input password:", password)
-        print("Stored hash:", self.password_hash)
-        print("Password check:", check_password_hash(self.password_hash, password))
         return check_password_hash(self.password_hash, password)
 
     def to_dict(self):
@@ -93,15 +90,21 @@ def login():
         data = request.get_json()
         username = data.get('username')
         password = data.get('password')
-
+        
         if not username or not password:
             return jsonify({'error': 'Username and password required'}), 400
 
         user = User.query.filter_by(username=username).first()
 
+        if user:
+            print("User found:", user.username)
+            print("Hash from DB:", user.password_hash)
+            print("Password valid:", user.check_password(password))
+
         if user and user.check_password(password):
+            logger.info(f"User {username} logged in successfully, creating access token")
             access_token = create_access_token(identity=user.id)
-            logger.info(f"User {username} logged in successfully")
+            
             return jsonify({
                 'token': access_token,
                 'user': user.to_dict()
