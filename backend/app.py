@@ -15,6 +15,8 @@ from dotenv import load_dotenv
 import logging
 import json
 
+from db_objects import User
+
 # Load environment variables
 load_dotenv()
 
