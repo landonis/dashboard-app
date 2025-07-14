@@ -12,6 +12,19 @@ SERVICE_USER="dashboardapp"
 LOG_FILE="/var/log/dashboard-setup.log"
 DOMAIN_NAME="${DOMAIN_NAME:-localhost}"
 
+# Close running backend if needed
+PORT=5000
+# Check if the port is in use
+PID=$(sudo lsof -ti :$PORT)
+
+if [ -n "$PID" ]; then
+  echo "Process found using port $PORT (PID: $PID). Killing it..."
+  sudo kill -9 $PID
+else
+  echo "Nothing is running on port $PORT. No action needed."
+fi
+
+
 # Logging function
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
@@ -53,6 +66,11 @@ apt-get install -y \
     wget \
     unzip \
     software-properties-common
+
+
+# Remove old nginx configuration files
+sudo rm -rf /etc/nginx/sites-enabled/dashboard
+sudo nginx -t && sudo systemctl reload nginx
 
 # Create service user
 log "Creating service user..."
