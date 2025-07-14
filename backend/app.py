@@ -85,7 +85,7 @@ def user_or_admin_required(f):
     return decorated_function
 
 # Routes
-@app.route('/api/auth/login', methods=['POST'])
+@app.route('/auth/login', methods=['POST'])
 def login():
     try:
         data = request.get_json()
@@ -117,12 +117,12 @@ def login():
         logger.error(f"Login error: {str(e)}")
         return jsonify({'error': 'Login failed'}), 500
 
-@app.route('/api/auth/logout', methods=['POST'])
+@app.route('/auth/logout', methods=['POST'])
 @jwt_required()
 def logout():
     return jsonify({'message': 'Logout successful'})
 
-@app.route('/api/auth/me', methods=['GET'])
+@app.route('/auth/me', methods=['GET'])
 @jwt_required()
 def get_current_user():
     try:
@@ -135,7 +135,7 @@ def get_current_user():
         logger.error(f"Get current user error: {str(e)}")
         return jsonify({'error': 'Failed to get user'}), 500
 
-@app.route('/api/users', methods=['GET'])
+@app.route('/users', methods=['GET'])
 @jwt_required()
 @admin_required
 def get_users():
@@ -146,7 +146,7 @@ def get_users():
         logger.error(f"Get users error: {str(e)}")
         return jsonify({'error': 'Failed to get users'}), 500
 
-@app.route('/api/users', methods=['POST'])
+@app.route('/users', methods=['POST'])
 @jwt_required()
 @admin_required
 def create_user():
@@ -176,7 +176,7 @@ def create_user():
         db.session.rollback()
         return jsonify({'error': 'Failed to create user'}), 500
 
-@app.route('/api/users/<int:user_id>', methods=['PUT'])
+@app.route('/users/<int:user_id>', methods=['PUT'])
 @jwt_required()
 @admin_required
 def update_user(user_id):
@@ -203,7 +203,7 @@ def update_user(user_id):
         db.session.rollback()
         return jsonify({'error': 'Failed to update user'}), 500
 
-@app.route('/api/users/<int:user_id>', methods=['DELETE'])
+@app.route('/users/<int:user_id>', methods=['DELETE'])
 @jwt_required()
 @admin_required
 def delete_user(user_id):
@@ -222,7 +222,7 @@ def delete_user(user_id):
         db.session.rollback()
         return jsonify({'error': 'Failed to delete user'}), 500
 
-@app.route('/api/users/<int:user_id>/change-password', methods=['POST'])
+@app.route('/users/<int:user_id>/change-password', methods=['POST'])
 @jwt_required()
 @admin_required
 def change_password(user_id):
@@ -248,7 +248,7 @@ def change_password(user_id):
 # Import and register module routes
 try:
     from modules.system_info.api import system_info_bp
-    app.register_blueprint(system_info_bp, url_prefix='/api/modules')
+    app.register_blueprint(system_info_bp, url_prefix='/modules')
     logger.info("System info module loaded successfully")
 except ImportError as e:
     logger.error(f"Failed to load system info module: {str(e)}")
@@ -257,7 +257,7 @@ except Exception as e:
 
 # Health check endpoint
 
-@app.route('/api/health', methods=['GET'])
+@app.route('/health', methods=['GET'])
 def health_check():
     return jsonify({'status': 'healthy', 'timestamp': datetime.utcnow().isoformat()})
 
