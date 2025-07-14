@@ -5,7 +5,7 @@
 set -e
 DOMAIN=""
 LE_CERT_PATH="/etc/letsencrypt/live/$DOMAIN"
-NGINX_CONFIG="/etc/nginx/sites-enabled/dashboard.landonis.top"  # Adjust if you're using a different path
+NGINX_CONFIG="/etc/nginx/sites-enabled/dashboard"  # Adjust if you're using a different path
 
 echo "[*] Checking Let's Encrypt certificate path..."
 
