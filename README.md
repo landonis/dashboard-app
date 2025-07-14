@@ -1,3 +1,11 @@
+# Deploy
+
+copy updated_setup.sh to machine and run it
+adjust Domain var insite of /opt/dashboard-app/scripts/SSL.sh
+run SSL.sh
+add ^~ to location /api/
+
+
 # Modular Dashboard Web App
 
 A secure, production-ready dashboard web application designed as a central control panel for microservice systems. Features authentication, role-based access control (RBAC), SSL encryption, firewall protection, and GitHub-based deployment.
