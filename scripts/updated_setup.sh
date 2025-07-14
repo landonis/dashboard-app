@@ -3,6 +3,24 @@
 # Dashboard App Setup Script
 # This script sets up the dashboard application with all required components
 
+
+# Logging function
+log() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
+}
+
+# Error handling
+error_exit() {
+    log "ERROR: $1"
+    exit 1
+}
+
+# Check if running as root
+if [[ $EUID -ne 0 ]]; then
+    error_exit "This script must be run as root"
+fi
+
+log "Starting dashboard application setup..."
 set -e
 
 # Configuration
@@ -25,23 +43,6 @@ else
 fi
 
 
-# Logging function
-log() {
-    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
-}
-
-# Error handling
-error_exit() {
-    log "ERROR: $1"
-    exit 1
-}
-
-# Check if running as root
-if [[ $EUID -ne 0 ]]; then
-    error_exit "This script must be run as root"
-fi
-
-log "Starting dashboard application setup..."
 
 # Update system packages
 log "Updating system packages..."
