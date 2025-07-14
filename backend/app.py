@@ -138,7 +138,6 @@ def get_current_user():
         return jsonify({'error': 'Failed to get user'}), 500
 
 @app.route('/users', methods=['GET'])
-@jwt_required()
 @admin_required
 def get_users():
     try:
@@ -149,7 +148,6 @@ def get_users():
         return jsonify({'error': 'Failed to get users'}), 500
 
 @app.route('/users', methods=['POST'])
-@jwt_required()
 @admin_required
 def create_user():
     try:
@@ -179,7 +177,6 @@ def create_user():
         return jsonify({'error': 'Failed to create user'}), 500
 
 @app.route('/users/<int:user_id>', methods=['PUT'])
-@jwt_required()
 @admin_required
 def update_user(user_id):
     try:
@@ -206,7 +203,6 @@ def update_user(user_id):
         return jsonify({'error': 'Failed to update user'}), 500
 
 @app.route('/users/<int:user_id>', methods=['DELETE'])
-@jwt_required()
 @admin_required
 def delete_user(user_id):
     try:
@@ -225,7 +221,6 @@ def delete_user(user_id):
         return jsonify({'error': 'Failed to delete user'}), 500
 
 @app.route('/users/<int:user_id>/change-password', methods=['POST'])
-@jwt_required()
 @admin_required
 def change_password(user_id):
     try:
