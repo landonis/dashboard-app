@@ -331,5 +331,17 @@ if os.path.exists(db_path):
         print("[!] 'users' table not found. Skipping admin creation.")
     conn.close()
 else:
-    print("[!] Database not found at", db_path)
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL,
+            role TEXT NOT NULL
+        )
+    ''')
+    conn.commit()
+    conn.close()
+    print("[+] Database and users table created at", db_path)
 EOF
