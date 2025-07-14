@@ -65,23 +65,25 @@ class User(db.Model):
 
 # Authentication decorators
 def admin_required(f):
+    @wraps(f)
+    @jwt_required()
     def decorated_function(*args, **kwargs):
         current_user_id = get_jwt_identity()
         user = User.query.get(current_user_id)
         if not user or user.role != 'admin':
             return jsonify({'error': 'Admin access required'}), 403
         return f(*args, **kwargs)
-    decorated_function.__name__ = f.__name__
     return decorated_function
 
 def user_or_admin_required(f):
+    @wraps(f)
+    @jwt_required()    
     def decorated_function(*args, **kwargs):
         current_user_id = get_jwt_identity()
         user = User.query.get(current_user_id)
         if not user or user.role not in ['user', 'admin']:
             return jsonify({'error': 'User access required'}), 403
         return f(*args, **kwargs)
-    decorated_function.__name__ = f.__name__
     return decorated_function
 
 # Routes
@@ -98,8 +100,8 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         if user:
-            logger.debug(f"Input password: {password}")
-            logger.debug(f"Hash from DB: {user.password_hash}")
+            logger.info(f"Input password: {password}")
+            logger.info(f"Hash from DB: {user.password_hash}")
 
         if user and user.check_password(password):
             logger.info(f"User {username} logged in successfully, creating access token")
