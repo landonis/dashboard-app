@@ -39,7 +39,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///das
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize extensions
-db = SQLAlchemy()
 jwt = JWTManager()
 db.init_app(app)
 jwt.init_app(app)
