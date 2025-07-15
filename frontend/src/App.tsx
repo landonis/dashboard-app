@@ -5,7 +5,7 @@ import Layout from './components/Layout'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import UsersPage from './pages/UsersPage'
-import SystemInfoPage from './modules/system-info/SystemInfoPage'
+import SystemInfoPage from './modules/system-info/SystemInfo'
 import LoadingSpinner from './components/LoadingSpinner'
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
       <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/users" element={<UsersPage />} />
-        <Route path="/system-info" element={<SystemInfoPage />} />
+        <Route path="/system-info" element={<SystemInfo />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Layout>
