@@ -1,230 +1,183 @@
-# Deploy
+# Dashboard Application (Production Template)
 
-copy updated_setup.sh to machine and run it
-add a domain name to the setup script to add SSL
+A secure, modular, production-ready dashboard web application designed to manage and monitor systems through a unified interface. Features include cookie-based JWT authentication, system metrics, user management, and modular plugin support.
 
+> ⚠️ This is a sample project and includes dummy data for demonstration purposes.
 
-# Modular Dashboard Web App
+---
 
-A secure, production-ready dashboard web application designed as a central control panel for microservice systems. Features authentication, role-based access control (RBAC), SSL encryption, firewall protection, and GitHub-based deployment.
+## 📦 Tech Stack
 
-## Architecture & Tech Stack
+* **Frontend**: React + Vite + Tailwind CSS
+* **Backend**: Flask (Python 3.12) + SQLite
+* **Deployment**: Gunicorn + Nginx + systemd
+* **Security**: Let's Encrypt SSL, iptables firewall
+* **Auth**: JWT stored in HTTP-only cookies with role-based access (RBAC)
 
-- **Frontend**: React + Tailwind CSS (Vite)
-- **Backend**: Flask + SQLite
-- **Reverse Proxy**: Nginx
-- **Security**: Let's Encrypt SSL + iptables firewall
-- **Deployment**: GitHub-based with systemd services
-- **User Management**: Local SQLite authentication with RBAC
+---
 
-## GitHub Repository
+## 🚀 Quick Setup Instructions (Ubuntu 24.04)
 
-This application is deployed from and updated via:
-```
-https://github.com/landonis/dashboard-app
-```
+### 1. Download Setup Script
 
-## Quick Setup (Ubuntu 24.04)
+Use `wget` or `git` to download `updated_setup.sh` to your home directory (e.g. `/home/ubuntu` or `~/`):
 
-1. **Clone or download this repository**
-2. **Run the setup script as root**:
-   ```bash
-   sudo ./scripts/setup.sh
-   ```
-3. **Access the dashboard**:
-   - HTTPS: `https://your-domain.com` or `https://your-ip`
-   - Default credentials: `admin` / `admin`
-
-## Setup Script Features
-
-The `setup.sh` script is idempotent and handles:
-
-- **System user creation** (`dashboardapp` with no SSH login)
-- **GitHub repository cloning/updating** from the official repo
-- **System package installation** (nginx, certbot, python3, nodejs, etc.)
-- **iptables firewall configuration** (ports 22, 80, 443 only)
-- **SSL certificate setup** (Let's Encrypt with self-signed fallback)
-- **Nginx reverse proxy configuration**
-- **systemd service management** for frontend and backend
-- **Database initialization** with admin account and RBAC roles
-- **Frontend build process** with environment validation
-- **Comprehensive logging** to `/var/log/dashboard-setup.log`
-
-## SSL Certificate Logic
-
-1. **Let's Encrypt**: Attempts automatic SSL certificate generation
-2. **Self-signed fallback**: Creates local certificate if Let's Encrypt fails
-3. **Nginx configuration**: Automatically configures HTTPS with proper redirects
-
-## Role-Based Access Control
-
-### Default Roles:
-- **admin**: Full access to all modules and user management
-- **user**: Restricted access to basic dashboard features
-
-### Default Users:
-- **Username**: `admin`, **Password**: `admin`, **Role**: `admin`
-
-### Admin Features:
-- User management (create, edit, delete users)
-- Role assignment
-- Password changes
-- Access to all modules
-
-## Firewall Configuration (iptables)
-
-The setup script configures iptables with:
-- **Allow**: SSH (22), HTTP (80), HTTPS (443)
-- **Block**: All other incoming ports
-- **Whitelist**: Localhost traffic
-- **Persistence**: Rules saved with `netfilter-persistent`
-
-## Sample Module: System Info
-
-The System Info module demonstrates the modular architecture:
-
-- **Backend**: `/modules/system-info/api.py`
-- **Frontend**: `/modules/system-info/SystemInfoPage.tsx`
-- **Features**: System uptime, memory usage, CPU load
-- **Access**: Admin role required
-- **API Endpoint**: `/api/modules/system-info`
-
-## Adding New Modules
-
-1. **Create module directory**: `/modules/your-module/`
-2. **Backend API**: Create `api.py` with Flask routes
-3. **Frontend Component**: Create React component
-4. **Register routes**: Add to backend router
-5. **Add navigation**: Update frontend menu
-6. **Configure RBAC**: Set role requirements
-
-### Module Structure:
-```
-/modules/your-module/
-├── api.py          # Flask API routes
-├── Component.tsx   # React component
-└── README.md       # Module documentation
-```
-
-## GitHub Deployment & Updates
-
-### Initial Deployment:
 ```bash
-sudo ./scripts/setup.sh
+wget https://raw.githubusercontent.com/landonis/dashboard-app/main/scripts/updated_setup.sh
+# OR
+# git clone https://github.com/landonis/dashboard-app.git
 ```
 
-### Updates:
+### 2. Make It Executable
+
 ```bash
-sudo ./scripts/setup.sh
+chmod +x ~/updated_setup.sh
 ```
 
-The script automatically:
-- Pulls latest changes from GitHub
-- Preserves local `.env` and configurations
-- Rebuilds and restarts services
-- Validates deployment integrity
+### 3. Edit Domain Name
 
-## File Structure
+Open the script and set your domain name:
 
-```
-/opt/dashboard-app/
-├── frontend/           # React application
-│   ├── src/
-│   ├── public/
-│   └── package.json
-├── backend/            # Flask application
-│   ├── app.py
-│   ├── auth.py
-│   ├── database.py
-│   └── requirements.txt
-├── modules/            # Modular components
-│   └── system-info/
-│       ├── api.py
-│       └── SystemInfoPage.tsx
-├── scripts/            # Deployment scripts
-│   └── setup.sh
-├── systemd/            # Service configurations
-│   ├── dashboard-backend.service
-│   └── dashboard-frontend.service
-├── nginx/              # Nginx configuration
-│   └── dashboard.conf
-├── .env                # Environment variables
-└── README.md
+```bash
+DOMAIN_NAME="your-domain.com"
 ```
 
-## Services
+### 4. Run the Script
 
-### Backend Service: `dashboard-backend.service`
-- **Port**: 5000
-- **User**: `dashboardapp`
-- **Auto-restart**: Yes
-- **Logs**: `journalctl -u dashboard-backend`
+```bash
+sudo ~/updated_setup.sh
+```
 
-### Frontend Service: `dashboard-frontend.service`
-- **Port**: 3000
-- **User**: `dashboardapp`
-- **Auto-restart**: Yes
-- **Logs**: `journalctl -u dashboard-frontend`
+This script:
 
-## Security Features
+* Installs system dependencies
+* Clones the GitHub repo
+* Builds frontend and backend
+* Configures Nginx and SSL
+* Deploys with Gunicorn and systemd
 
-- **Authentication**: SQLite-based with bcrypt password hashing
-- **RBAC**: Role-based access control for all routes
-- **SSL/TLS**: HTTPS enforcement with automatic redirects
-- **Firewall**: iptables with minimal port exposure
-- **Service User**: Non-privileged `dashboardapp` user
-- **Input Validation**: SQL injection and XSS protection
+---
 
-## Troubleshooting
+## 🔐 Authentication
 
-### Check service status:
+* JWT access tokens are issued via `set_access_cookies()`
+* Tokens are stored in **secure, HTTP-only cookies**
+* Login state is maintained via `/auth/me`
+* Logout clears cookie with `unset_jwt_cookies()`
+* No `localStorage` is used for token handling
+
+---
+
+## 📁 Project Structure
+
+```
+dashboard-app/
+├── backend/               # Flask app (modular backend)
+│   ├── modules/           # Modular features (e.g., system info)
+│   ├── auth.py            # JWT login/logout
+│   ├── app.py             # App factory and route registration
+│   └── ...
+├── frontend/              # React frontend (Vite + Tailwind)
+│   ├── src/pages/         # LoginPage, SystemInfoPage, etc.
+│   ├── contexts/          # AuthContext
+│   └── ...
+├── scripts/               # Setup scripts
+│   └── updated_setup.sh
+└── nginx/                 # Nginx config templates
+```
+
+---
+
+## 🛠 Features
+
+* Secure JWT cookie-based login system
+* Admin panel with user management (SQLite-based RBAC)
+* Modular backend architecture (`/modules`)
+* Live system metrics (CPU, memory, disk, uptime)
+* Auto-refresh on system info page
+* Role-restricted routes using `hasRole()`
+* Reverse proxy via Nginx with automatic Let's Encrypt SSL
+* Fully automated deployment with `setup.sh`
+
+---
+
+## 📂 Environment Variables (`.env`)
+
+This file is created automatically but supports the following overrides:
+
+```env
+SECRET_KEY=...
+JWT_SECRET_KEY=...
+DATABASE_URL=sqlite:///dashboard.db
+FLASK_ENV=production
+FLASK_DEBUG=false
+VITE_API_URL=https://your-domain.com
+```
+
+---
+
+## 🔎 Verifying Deployment
+
+### Backend
+
 ```bash
 sudo systemctl status dashboard-backend
+```
+
+### Frontend
+
+```bash
 sudo systemctl status dashboard-frontend
-sudo systemctl status nginx
 ```
 
-### View logs:
+### Nginx
+
 ```bash
-sudo tail -f /var/log/dashboard-setup.log
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+### Logs
+
+```bash
 sudo journalctl -u dashboard-backend -f
-sudo journalctl -u dashboard-frontend -f
+sudo tail -f /var/log/nginx/error.log
 ```
 
-### Restart services:
-```bash
-sudo systemctl restart dashboard-backend
-sudo systemctl restart dashboard-frontend
-sudo systemctl restart nginx
+---
+
+## 🌐 Accessing the Dashboard
+
+After deployment:
+
+```
+https://your-domain.com
 ```
 
-### SSL certificate renewal:
-```bash
-sudo certbot renew
-sudo systemctl reload nginx
-```
+Default credentials:
 
-## Development
+* Username: `admin`
+* Password: `admin`
 
-### Local development:
-```bash
-# Backend
-cd backend
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python app.py
+Login as admin to view live system stats and manage users.
 
-# Frontend
-cd frontend
-npm install
-npm run dev
-```
+---
 
-## License
+## 🔧 Extending the Dashboard
 
-Open-source compatible - modify and distribute freely.
+### Adding a Module
 
-## Support
+1. Create a folder in `backend/modules/`
+2. Add a `routes.py` with `@bp.route(...)`
+3. Register blueprint in `app.py`
 
-For issues and contributions, please use the GitHub repository issues section.
+### Frontend Integration
+
+1. Add page under `frontend/src/pages`
+2. Update navigation/sidebar
+3. Secure route with `hasRole('admin')`
+
+---
+
+## 📘 License
+
+MIT. See `LICENSE` file for details.
