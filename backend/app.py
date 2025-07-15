@@ -109,8 +109,9 @@ def login():
 @app.route('/auth/logout', methods=['POST'])
 @jwt_required()
 def logout():
-    # TODO unset_jwt_cookies
-    return jsonify({'message': 'Logout successful'})
+    response = jsonify({"msg": "Logout successful"})
+    unset_jwt_cookies(response)  # 👈 This removes the access token cookie
+    return response
 
 @app.route('/auth/me', methods=['GET'])
 @jwt_required()
