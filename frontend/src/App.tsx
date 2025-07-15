@@ -24,7 +24,7 @@ function App() {
       <Routes>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/users" element={<UsersPage />} />
-        <Route path="/system-info" element={<SystemInfo />} />
+        <Route path="/system-info" element={<SystemInfoPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Layout>
