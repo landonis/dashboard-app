@@ -8,7 +8,7 @@ with all modules correctly imported.
 
 import os
 import sys
-
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 # Add the project root to Python path
 project_root = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(project_root)
