@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Monitor, User as UserIcon, Clock } from "lucide-react"
 import LoadingSpinner from "../components/LoadingSpinner"
-import api from "../lib/api"
+import api from "../services/api"
 import { useAuth } from "../contexts/AuthContext"
 
 interface SystemInfo {
