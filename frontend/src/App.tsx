@@ -5,7 +5,7 @@ import Layout from './components/Layout'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import UsersPage from './pages/UsersPage'
-import SystemInfoPage from './modules/system-info/SystemInfo'
+import SystemInfoPage from './pages/SystemInfo'
 import LoadingSpinner from './components/LoadingSpinner'
 
 function App() {
