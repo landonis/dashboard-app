@@ -244,14 +244,15 @@ def change_password(user_id):
         return jsonify({'error': 'Failed to change password'}), 500
 
 # Import and register module routes
-try:
-    from modules.system_info.api import system_info_bp
-    app.register_blueprint(system_info_bp, url_prefix='/api/modules')
-    logger.info("System info module loaded successfully")
-except ImportError as e:
-    logger.error(f"Failed to load system info module: {str(e)}")
-except Exception as e:
-    logger.error(f"Error registering system info module: {str(e)}")
+from modules.system_info.api import system_info_bp
+app.register_blueprint(system_info_bp, url_prefix='/api/modules')
+#try:
+
+#    logger.info("System info module loaded successfully")
+#except ImportError as e:
+ #   logger.error(f"Failed to load system info module: {str(e)}")
+#except Exception as e:
+ #   logger.error(f"Error registering system info module: {str(e)}")
 
 # Health check endpoint
 
