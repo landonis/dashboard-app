@@ -94,10 +94,9 @@ def login():
             logger.info(f"User {username} logged in successfully, creating access token")
             access_token = create_access_token(identity=str(user.id))
             
-            return jsonify({
-                'token': access_token,
-                'user': user.to_dict()
-            })
+            response = jsonify({'msg': 'Login successful'})
+            set_access_cookies(response, access_token)
+            return response
         else:
             logger.warning(f"Failed login attempt for user {username}")
             return jsonify({'error': 'Invalid credentials'}), 401
