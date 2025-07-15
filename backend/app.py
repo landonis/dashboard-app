@@ -246,7 +246,7 @@ def change_password(user_id):
 # Import and register module routes
 try:
     from modules.system_info.api import system_info_bp
-    app.register_blueprint(system_info_bp, url_prefix='/api/modules')
+    app.register_blueprint(system_info_bp, url_prefix='/modules')
     logger.info("System info module loaded successfully")
 except ImportError as e:
     logger.error(f"Failed to load system info module: {str(e)}")
