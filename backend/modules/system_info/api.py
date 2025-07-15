@@ -11,7 +11,7 @@ system_info_bp = Blueprint('system_info', __name__)
 @system_info_bp.route('/system-info', methods=['GET'])
 @jwt_required()
 def get_system_info():
-    from backend.user import User  # ← import here to avoid circular import
+    from ..user import User  # ← import here to avoid circular import
 
     user_id = int(get_jwt_identity())
     user = User.query.get(user_id)
