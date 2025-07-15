@@ -1,57 +1,92 @@
-// src/pages/SystemInfo.tsx
-import { useEffect, useState } from "react";
-import api from "@/lib/api";
-import { Card, CardContent } from "@/components/ui/card";
-import { Loader2, Server, User } from "lucide-react";
+import { useEffect, useState } from "react"
+import { Monitor, User as UserIcon, Clock } from "lucide-react"
+import LoadingSpinner from "../components/LoadingSpinner"
+import api from "../lib/api"
+import { useAuth } from "../contexts/AuthContext"
 
 interface SystemInfo {
-  user: string;
-  timestamp: string;
-  hostname: string;
+  user: string
+  timestamp: string
+  hostname: string
 }
 
 export default function SystemInfoPage() {
-  const [data, setData] = useState<SystemInfo | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const { user } = useAuth()
+  const [info, setInfo] = useState<SystemInfo | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
 
   useEffect(() => {
     api.get("/api/modules/system-info")
-      .then(res => setData(res.data))
-      .catch(() => setError("Failed to fetch system info"))
-      .finally(() => setLoading(false));
-  }, []);
+      .then(res => setInfo(res.data))
+      .catch(() => setError("Unable to load system information"))
+      .finally(() => setLoading(false))
+  }, [])
+
+  if (loading) return <LoadingSpinner />
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-3xl font-semibold">System Info</h1>
-      {loading ? (
-        <div className="flex items-center space-x-2 text-gray-500">
-          <Loader2 className="animate-spin" />
-          <span>Loading...</span>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="bg-white shadow-sm rounded-lg p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">System Info</h1>
+            <p className="text-gray-600">
+              Details for <span className="font-medium">{user?.username}</span>
+            </p>
+          </div>
         </div>
-      ) : error ? (
-        <div className="text-red-500">{error}</div>
-      ) : data ? (
-        <Card className="max-w-md">
-          <CardContent className="p-4 space-y-4">
-            <div className="flex items-center space-x-2">
-              <User className="w-5 h-5" />
-              <span className="font-medium">User:</span>
-              <span>{data.user}</span>
+      </div>
+
+      {error && (
+        <div className="bg-red-100 text-red-700 px-4 py-3 rounded-md">
+          {error}
+        </div>
+      )}
+
+      {info && (
+        <>
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Hostname</p>
+                  <p className="text-xl font-bold text-gray-900">{info.hostname}</p>
+                </div>
+                <div className="p-3 rounded-full bg-primary-50">
+                  <Monitor className="h-6 w-6 text-primary-600" />
+                </div>
+              </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <Server className="w-5 h-5" />
-              <span className="font-medium">Hostname:</span>
-              <span>{data.hostname}</span>
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">User</p>
+                  <p className="text-xl font-bold text-gray-900">{info.user}</p>
+                </div>
+                <div className="p-3 rounded-full bg-secondary-50">
+                  <UserIcon className="h-6 w-6 text-secondary-600" />
+                </div>
+              </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <span className="font-medium">Timestamp:</span>
-              <span>{new Date(data.timestamp).toLocaleString()}</span>
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Timestamp</p>
+                  <p className="text-xl font-bold text-gray-900">
+                    {new Date(info.timestamp).toLocaleString()}
+                  </p>
+                </div>
+                <div className="p-3 rounded-full bg-success-50">
+                  <Clock className="h-6 w-6 text-success-600" />
+                </div>
+              </div>
             </div>
-          </CardContent>
-        </Card>
-      ) : null}
+          </div>
+        </>
+      )}
     </div>
-  );
+  )
 }
