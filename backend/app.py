@@ -226,7 +226,7 @@ def change_password(user_id):
 
 # Import and register module routes
 from modules.system_info.api import system_info_bp
-app.register_blueprint(system_info_bp, url_prefix='/api/modules')
+app.register_blueprint(system_info_bp, url_prefix='/modules')
 #try:
 
 #    logger.info("System info module loaded successfully")
