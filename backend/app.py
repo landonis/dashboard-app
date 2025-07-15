@@ -244,7 +244,7 @@ def change_password(user_id):
         return jsonify({'error': 'Failed to change password'}), 500
 
 # Import and register module routes
-from backend.modules.system_info.api import system_info_bp
+from modules.system_info.api import system_info_bp
 app.register_blueprint(system_info_bp, url_prefix='/api/modules')
 #try:
 
