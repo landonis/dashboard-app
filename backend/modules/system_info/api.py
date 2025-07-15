@@ -4,6 +4,11 @@ from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 import logging
 
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+from backend.user import User
+
 logger = logging.getLogger(__name__)
 
 system_info_bp = Blueprint('system_info', __name__)
@@ -11,7 +16,7 @@ system_info_bp = Blueprint('system_info', __name__)
 @system_info_bp.route('/system-info', methods=['GET'])
 @jwt_required()
 def get_system_info():
-    from ..user import User  # ← import here to avoid circular import
+      # ← import here to avoid circular import
 
     user_id = int(get_jwt_identity())
     user = User.query.get(user_id)
