@@ -17,7 +17,7 @@ system_info_bp = Blueprint('system_info', __name__)
 @jwt_required()
 def get_system_info():
       # ← import here to avoid circular import
-    from app import User
+    from models import User
     user_id = int(get_jwt_identity())
     user = User.query.get(user_id)
 
