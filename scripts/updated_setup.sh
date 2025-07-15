@@ -59,16 +59,13 @@ apt-get install -y \
     software-properties-common
 
 # Close running backend if needed
-PORT=5000
-# Check if the port is in use
-PID=$(lsof -ti :$PORT)
-
-if [ -n "$PID" ]; then
-  echo "Process found using port $PORT (PID: $PID). Killing it..."
-  sudo kill -9 $PID
+if systemctl list-units --type=service --all | grep -q "dashboard-backend.service"; then
+    echo "Stopping dashboard-backend service..."
+    systemctl stop dashboard-backend.service || true
 else
-  echo "Nothing is running on port $PORT. No action needed."
+    echo "dashboard-backend service not found, skipping stop"
 fi
+
 
 # Remove old nginx configuration files
 sudo rm -rf /etc/nginx/sites-enabled/dashboard
