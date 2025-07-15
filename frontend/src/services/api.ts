@@ -1,31 +1,26 @@
 import axios from 'axios'
 const api = axios.create({
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
-// Request interceptor to add auth token
+// Request interceptor (no token needed anymore)
 api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
-    return config
-  },
-  (error) => {
-    return Promise.reject(error)
-  }
+  (config) => config,
+  (error) => Promise.reject(error)
 )
 
-// Response interceptor to handle auth errors
+// Response interceptor to handle 401 errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token')
-      window.location.href = '/login'
+      // Optional: redirect to login if not authenticated
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login'
+      }
     }
     return Promise.reject(error)
   }
