@@ -82,7 +82,7 @@ def login():
             logger.warning("No JSON received — checking form data")
             data = request.form.to_dict()
         
-        username = data.get('username')
+        username = data.get('username', '').strip().lower()
         password = data.get('password')
 
         logger.info(f"Login data received: {data}")
@@ -146,7 +146,7 @@ def get_users():
 def create_user():
     try:
         data = request.get_json()
-        username = data.get('username')
+        username = data.get('username', '').strip().lower()
         password = data.get('password')
         role = data.get('role', 'user')
 
