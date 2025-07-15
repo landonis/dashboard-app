@@ -13,7 +13,9 @@ system_info_bp = Blueprint('system_info', __name__)
 def get_system_info():
     from backend.user import User  # ← import here to avoid circular import
 
-    user = User.query.filter_by(username=get_jwt_identity()).first()
+    user_id = int(get_jwt_identity())
+    user = User.query.get(user_id)
+
     return jsonify({
         "user": user.username if user else "unknown",
         "timestamp": datetime.utcnow().isoformat(),
