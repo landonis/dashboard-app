@@ -30,17 +30,7 @@ fi
 log "Starting dashboard application setup..."
 
 
-# Close running backend if needed
-PORT=5000
-# Check if the port is in use
-PID=$(lsof -ti :$PORT)
 
-if [ -n "$PID" ]; then
-  echo "Process found using port $PORT (PID: $PID). Killing it..."
-  sudo kill -9 $PID
-else
-  echo "Nothing is running on port $PORT. No action needed."
-fi
 
 
 
@@ -68,6 +58,17 @@ apt-get install -y \
     unzip \
     software-properties-common
 
+# Close running backend if needed
+PORT=5000
+# Check if the port is in use
+PID=$(lsof -ti :$PORT)
+
+if [ -n "$PID" ]; then
+  echo "Process found using port $PORT (PID: $PID). Killing it..."
+  sudo kill -9 $PID
+else
+  echo "Nothing is running on port $PORT. No action needed."
+fi
 
 # Remove old nginx configuration files
 sudo rm -rf /etc/nginx/sites-enabled/dashboard
