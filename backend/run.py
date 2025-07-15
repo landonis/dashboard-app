@@ -19,7 +19,7 @@ sys.path.insert(0, project_root)
 from app import app, init_db, logger
 
 if __name__ == '__main__':
-    with app.app_context()
+    with app.app_context():
         init_db()
     port = int(os.getenv('PORT', 5000))
     debug = os.getenv('FLASK_DEBUG', 'False').lower() == 'true'
