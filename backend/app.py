@@ -5,6 +5,7 @@ import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'modules')))
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from models import db, User
 from datetime import datetime, timedelta
 from functools import wraps
 from flask import Flask, request, jsonify
@@ -44,28 +45,6 @@ db.init_app(app)
 jwt.init_app(app)
 
 CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "*"}})
-
-# Database Models
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password_hash = db.Column(db.String(120), nullable=False)
-    role = db.Column(db.String(20), nullable=False, default='user')
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
-
-    def check_password(self, password):
-        return check_password_hash(self.password_hash, password)
-
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'username': self.username,
-            'role': self.role,
-            'created_at': self.created_at.isoformat()
-        }
 
 # Authentication decorators
 def admin_required(f):
