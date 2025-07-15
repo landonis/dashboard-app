@@ -78,8 +78,14 @@ def user_or_admin_required(f):
 def login():
     try:
         data = request.get_json()
+        if data is None:
+            logger.warning("No JSON received — checking form data")
+            data = request.form.to_dict()
+        
         username = data.get('username')
         password = data.get('password')
+
+        logger.info(f"Login data received: {data}")
         
         if not username or not password:
             return jsonify({'error': 'Username and password required'}), 400
