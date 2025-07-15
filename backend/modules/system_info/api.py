@@ -7,7 +7,7 @@ import logging
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-from backend.user import User
+
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ system_info_bp = Blueprint('system_info', __name__)
 @jwt_required()
 def get_system_info():
       # ← import here to avoid circular import
-
+    from app import User
     user_id = int(get_jwt_identity())
     user = User.query.get(user_id)
 
