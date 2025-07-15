@@ -7,7 +7,7 @@ import logging
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-from ...user import User
+from backend.user import User
 
 logger = logging.getLogger(__name__)
 
