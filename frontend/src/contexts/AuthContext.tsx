@@ -36,28 +36,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      getCurrentUser()
-        .then(userData => {
-          setUser(userData)
-        })
-        .catch(() => {
-          localStorage.removeItem('token')
-        })
-        .finally(() => {
-          setLoading(false)
-        })
-    } else {
-      setLoading(false)
-    }
+    getCurrentUser()
+      .then(userData => {
+        setUser(userData)
+      })
+      .catch(() => {
+        setUser(null)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }, [])
+   
 
   const login = async (username: string, password: string): Promise<boolean> => {
     try {
-      const response = await apiLogin(username, password)
-      localStorage.setItem('token', response.token)
-      setUser(response.user)
+      await apiLogin(username, password)             // no localStorage
+      const userData = await getCurrentUser()        // fetch user from cookie-auth'd request
+      setUser(userData)
       return true
     } catch (error) {
       console.error('Login error:', error)
@@ -66,9 +62,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   const logout = () => {
-    localStorage.removeItem('token')
-    setUser(null)
     apiLogout()
+    setUser(null)
   }
 
   const hasRole = (role: string): boolean => {
