@@ -109,6 +109,7 @@ def login():
 @app.route('/auth/logout', methods=['POST'])
 @jwt_required()
 def logout():
+    # TODO unset_jwt_cookies
     return jsonify({'message': 'Logout successful'})
 
 @app.route('/auth/me', methods=['GET'])
