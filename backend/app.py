@@ -106,7 +106,7 @@ def login():
 
         if user and user.check_password(password):
             logger.info(f"User {username} logged in successfully, creating access token")
-            access_token = create_access_token(identity=user.id)
+            access_token = create_access_token(identity=str(user.id))
             
             return jsonify({
                 'token': access_token,
