@@ -248,7 +248,6 @@ server {
 server {
     listen 443 ssl http2;
     server_name $DOMAIN_NAME;
-    
     # SSL configuration (will be updated by certbot or self-signed)
     ssl_certificate /etc/ssl/certs/dashboard.crt;
     ssl_certificate_key /etc/ssl/private/dashboard.key;
@@ -271,6 +270,7 @@ server {
     # Backend API
     location ^~ /api/ {
         proxy_pass http://localhost:5000/;
+        client_max_body_size 1024M;  # 1GB, adjust to your need
         proxy_set_header Host \$host;
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
